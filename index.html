@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catholic Owned — Project Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #17294A;
+    --gold: #F2CD69;
+    --champagne: #DECF8F;
+    --cream: #FAF9F5;
+    --white: #FFFFFF;
+    --text: #14140F;
+    --text-secondary: #616161;
+    --soft-blue: #8DAADB;
+    --success: #3D7A4A;
+    --warning: #D4A017;
+    --error: #B33A3A;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Nav */
+  .nav {
+    background: rgba(250,249,245,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(23,41,74,0.08);
+    padding: 16px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    font-family: 'EB Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .nav-brand em {
+    font-weight: 400;
+    opacity: 0.7;
+  }
+  .nav-right {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .nav-right a {
+    color: var(--navy);
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+  }
+  .nav-right a:hover { text-decoration: underline; }
+
+  /* Header */
+  .header {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 48px 40px 40px;
+  }
+  .header h1 {
+    font-family: 'EB Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .header p {
+    font-size: 14px;
+    opacity: 0.8;
+    font-weight: 300;
+  }
+  .header-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+  }
+  .header-stat {
+    text-align: center;
+  }
+  .header-stat .number {
+    font-family: 'EB Garamond', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+  }
+  .header-stat .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+  }
+
+  /* Timeline */
+  .timeline-bar {
+    background: var(--white);
+    border-bottom: 1px solid rgba(23,41,74,0.08);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .timeline-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .timeline-date.urgent {
+    background: #FFF3CD;
+    color: #856404;
+    border: 1px solid #FFEAA7;
+  }
+  .timeline-date.target {
+    background: #D4EDDA;
+    color: #155724;
+    border: 1px solid #C3E6CB;
+  }
+  .timeline-date.info {
+    background: #D6E9F8;
+    color: #004085;
+    border: 1px solid #B8DAFF;
+  }
+  .timeline-date .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .timeline-date.urgent .dot { background: var(--warning); }
+  .timeline-date.target .dot { background: var(--success); }
+  .timeline-date.info .dot { background: var(--soft-blue); }
+
+  /* Main grid */
+  .main {
+    padding: 32px 40px;
+    max-width: 1400px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 40px;
+  }
+  .section-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .section-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+  .gold-rule {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  /* Deliverable cards */
+  .deliverables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid rgba(23,41,74,0.06);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: box-shadow 0.15s;
+    position: relative;
+  }
+  .card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .card-id {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+  }
+  .card-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .card-title a:hover {
+    text-decoration: underline;
+  }
+  .card-budget {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+  }
+  .card-phase {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.03em;
+  }
+  .badge-done { background: #D4EDDA; color: #155724; }
+  .badge-in-progress { background: #D6E9F8; color: #004085; }
+  .badge-in-review { background: #FFF3CD; color: #856404; }
+  .badge-ready { background: #E8E5FF; color: #4A3D8F; }
+  .badge-backlog { background: #F0F0F0; color: #666; }
+  .badge-design { background: #FCE4EC; color: #880E4F; }
+  .badge-client { background: #FFF3E0; color: #E65100; }
+  .badge-infra { background: #E0F2F1; color: #00695C; }
+  .badge-scope-add { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
+
+  /* Progress bar */
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #EDEDEB;
+    border-radius: 3px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .progress-fill.green { background: var(--success); }
+  .progress-fill.blue { background: var(--soft-blue); }
+  .progress-fill.gold { background: var(--gold); }
+  .progress-fill.gray { background: #CCC; }
+
+  /* Checklist inside cards */
+  .checklist {
+    list-style: none;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .checklist li {
+    padding: 3px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .checklist li::before {
+    content: '';
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #CCC;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .checklist li.done::before {
+    background: var(--success);
+    border-color: var(--success);
+    /* checkmark via box-shadow trick */
+    box-shadow: inset 0 0 0 2px var(--success);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");
+    background-size: 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .checklist li.done { color: var(--text-secondary); }
+
+  /* Scope additions */
+  .scope-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+  .scope-card {
+    background: var(--white);
+    border: 1px solid #FFE082;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+  .scope-card .scope-title {
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .scope-card .scope-source {
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  /* Client items */
+  .client-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 12px;
+  }
+  .client-item {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--warning);
+    font-size: 13px;
+  }
+  .client-item .assignee {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  /* Footer */
+  .footer {
+    border-top: 2px solid var(--gold);
+    padding: 24px 40px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Sync button */
+  .sync-btn {
+    background: var(--navy);
+    color: var(--cream);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .sync-btn:hover { opacity: 0.85; }
+  .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .sync-status {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div>
+    <span class="nav-brand">Catholic Owned <em>Project Dashboard</em></span>
+  </div>
+  <div class="nav-right">
+    <span id="lastSync"></span>
+    <a href="https://github.com/orgs/Human-Centered-Tech/projects/2/views/1" target="_blank">GitHub Board</a>
+    <a href="https://stitch.withgoogle.com/projects/2011657876792885116" target="_blank">Stitch Designs</a>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>Catholic Owned Platform — MVP</h1>
+  <p>SOW 2026-002 · Human Centered Tech LLC · 16-week build</p>
+  <div class="header-stats">
+    <div class="header-stat">
+      <span class="number" id="statTotal">15</span>
+      <span class="label">Deliverables</span>
+    </div>
+    <div class="header-stat">
+      <span class="number" id="statInProgress">5</span>
+      <span class="label">In Progress</span>
+    </div>
+    <div class="header-stat">
+      <span class="number" id="statDone">0</span>
+      <span class="label">Complete</span>
+    </div>
+    <div class="header-stat">
+      <span class="number" id="statDesign">4</span>
+      <span class="label">Design Review</span>
+    </div>
+    <div class="header-stat">
+      <span class="number" id="statScopeAdds">6</span>
+      <span class="label">Scope Additions</span>
+    </div>
+  </div>
+</div>
+
+<div class="timeline-bar">
+  <span style="font-size:13px;font-weight:600;color:var(--navy);margin-right:8px;">Key Dates:</span>
+  <span class="timeline-date info"><span class="dot"></span>Apr 7–8 — Design Finalization</span>
+  <span class="timeline-date urgent"><span class="dot"></span>Apr 16 — Presentation & Vendor Demo</span>
+  <span class="timeline-date target"><span class="dot"></span>Jun 22 — Internal Launch</span>
+  <span class="timeline-date info"><span class="dot"></span>Jul–Sep — User Onboarding → Christmas</span>
+</div>
+
+<div class="main">
+
+  <!-- SOW DELIVERABLES -->
+  <div class="section">
+    <h2 class="section-title">SOW Deliverables (D1–D15)</h2>
+    <p class="section-subtitle">Original statement of work deliverables with current board status</p>
+    <div class="gold-rule"></div>
+    <div class="deliverables-grid" id="deliverables">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- DESIGN -->
+  <div class="section">
+    <h2 class="section-title">Design</h2>
+    <p class="section-subtitle">Stitch design screens — currently in client review</p>
+    <div class="gold-rule"></div>
+    <div class="deliverables-grid" id="designItems">
+    </div>
+  </div>
+
+  <!-- SCOPE ADDITIONS -->
+  <div class="section">
+    <h2 class="section-title">Scope Additions from Meetings</h2>
+    <p class="section-subtitle">New work identified in 3/24–4/1 client meetings — not in original SOW</p>
+    <div class="gold-rule"></div>
+    <div class="scope-grid" id="scopeItems">
+    </div>
+  </div>
+
+  <!-- CLIENT / INFRASTRUCTURE -->
+  <div class="section">
+    <h2 class="section-title">Client Actions & Infrastructure</h2>
+    <p class="section-subtitle">Items waiting on Brooke or external dependencies</p>
+    <div class="gold-rule"></div>
+    <div class="client-grid" id="clientItems">
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>Catholic Owned® — Building the New Catholic Economy® · Human Centered Tech LLC</div>
+  <div>
+    <button class="sync-btn" onclick="syncFromGitHub()">↻ Sync from GitHub</button>
+    <div class="sync-status" id="syncStatus"></div>
+  </div>
+</div>
+
+<script>
+// ─── Data ───────────────────────────────────────────────────────────
+
+const REPO = 'Human-Centered-Tech/catholic-owned-project-management';
+
+const deliverables = [
+  { id: 'D1', issue: 7, title: 'Core Platform & Unified Accounts', budget: '$2,604 (7%)', phase: 'Phase 1 · Weeks 1–3', status: 'In progress', notes: 'Added: single login, SSO, post-login routing, local storage cart' },
+  { id: 'D2', issue: 8, title: 'Vendor Storefronts', budget: '$2,604 (7%)', phase: 'Phase 1 · Weeks 1–3', status: 'In progress' },
+  { id: 'D3', issue: 9, title: 'Product Catalog & Search', budget: '$2,232 (6%)', phase: 'Phase 1 · Weeks 1–3', status: 'In progress' },
+  { id: 'D4', issue: 10, title: 'Shopping, Checkout & Platform Credits', budget: '$3,720 (10%)', phase: 'Phase 2 · Weeks 4–6', status: 'In progress', notes: 'Added: remove shipping step, split logged-in/guest checkout, Place Order CTA' },
+  { id: 'D5', issue: 11, title: 'Order Management', budget: '$2,232 (6%)', phase: 'Phase 2 · Weeks 4–6', status: 'In progress' },
+  { id: 'D6', issue: 12, title: 'Reviews & Messaging', budget: '$1,860 (5%)', phase: 'Phase 4 · Weeks 10–12', status: 'Backlog' },
+  { id: 'D7', issue: 13, title: 'Wishlist, Favorites & Gift Registry', budget: '$1,860 (5%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
+  { id: 'D8', issue: 14, title: 'Business Directory & Listings', budget: '$4,836 (13%)', phase: 'Phase 3 · Weeks 7–9', status: 'Backlog', notes: 'Added: $50/yr floor, always open, owner interview, devotional, conditional CTA, custom badges, map/list toggle' },
+  { id: 'D9', issue: 15, title: 'Catholic Speed Networking', budget: '$4,092 (11%)', phase: 'Phase 4 · Weeks 10–12', status: 'Backlog' },
+  { id: 'D10', issue: 16, title: 'Barter & Community Listings', budget: '$2,604 (7%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
+  { id: 'D11', issue: 17, title: 'Admin, Moderation & Analytics', budget: '$2,976 (8%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
+  { id: 'D12', issue: 18, title: 'Notifications, Email & SMS', budget: '$1,860 (5%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
+  { id: 'D13', issue: 19, title: 'CRM Integration', budget: '$744 (2%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
+  { id: 'D14', issue: 20, title: 'Mobile App Deployment', budget: '$1,488 (4%)', phase: 'Phase 6 · Weeks 15–16', status: 'Backlog' },
+  { id: 'D15', issue: 21, title: 'QA Testing & Launch', budget: '$1,488 (4%)', phase: 'Phase 6 · Weeks 15–16', status: 'Backlog' },
+];
+
+const designItems = [
+  { issue: 3, title: 'Storefront Design — 39 screens', status: 'In review', notes: '4 new pages added from meeting feedback' },
+  { issue: 4, title: 'Vendor Dashboard Design — 13 screens', status: 'In review' },
+  { issue: 5, title: 'Admin Dashboard Design — 16 screens', status: 'In review' },
+  { issue: 6, title: 'Auth Flow Design — 5 screens', status: 'In review' },
+  { issue: 30, title: 'Design Revisions from 3/24–4/1 Meeting Feedback', status: 'Backlog', notes: '11 screens edited, 3 new screens generated' },
+];
+
+const scopeItems = [
+  { issue: 25, title: 'Business Sales/Landing Page', source: 'Design Review (4/1)', status: 'Backlog', design: true },
+  { issue: 26, title: 'Business Payment Page', source: 'Design Review (4/1)', status: 'Backlog', design: true },
+  { issue: 27, title: 'Gift Guide / Curated Collections', source: 'Stitch Mockup Review (3/31)', status: 'Backlog', design: true },
+  { issue: 28, title: 'Guest Checkout Page', source: 'Design Review (4/1)', status: 'Backlog', design: true },
+  { issue: 29, title: 'April 16 Demo Video — Screenshots & Assets', source: 'Stitch Mockup Review (3/31)', status: 'Backlog', design: false },
+  { issue: 24, title: 'April 16 Vendor Demo Readiness', source: 'SOW Section 4.2', status: 'In progress', design: false },
+];
+
+const clientItems = [
+  { issue: 23, title: 'Content & Data', assignee: 'Brooke', items: [
+    'Send parish database',
+    'Provide ~10 testimonials',
+    'Map ~7 customer journeys (by Apr 7)',
+    'Produce demo video from Stitch screenshots',
+  ]},
+  { issue: 22, title: 'Third-Party Credentials', assignee: 'Brooke / Liam', items: [
+    'Zoom API credentials',
+    'Freshworks CRM API key',
+    'Twilio credentials',
+    'SendGrid API key',
+  ]},
+];
+
+// ─── Render ─────────────────────────────────────────────────────────
+
+function badgeClass(status) {
+  const s = status.toLowerCase();
+  if (s === 'done') return 'badge-done';
+  if (s === 'in progress') return 'badge-in-progress';
+  if (s === 'in review') return 'badge-in-review';
+  if (s === 'ready') return 'badge-ready';
+  return 'badge-backlog';
+}
+
+function progressColor(status) {
+  const s = status.toLowerCase();
+  if (s === 'done') return 'green';
+  if (s === 'in progress') return 'blue';
+  if (s === 'in review') return 'gold';
+  return 'gray';
+}
+
+function progressWidth(status) {
+  const s = status.toLowerCase();
+  if (s === 'done') return 100;
+  if (s === 'in progress') return 40;
+  if (s === 'in review') return 70;
+  if (s === 'ready') return 10;
+  return 0;
+}
+
+function issueUrl(num) {
+  return `https://github.com/${REPO}/issues/${num}`;
+}
+
+function renderDeliverables() {
+  const el = document.getElementById('deliverables');
+  el.innerHTML = deliverables.map(d => `
+    <div class="card">
+      <div class="card-header">
+        <span class="card-id">${d.id}</span>
+        <span class="badge ${badgeClass(d.status)}">${d.status}</span>
+      </div>
+      <div class="card-title"><a href="${issueUrl(d.issue)}" target="_blank">${d.title}</a></div>
+      <div class="card-budget">${d.budget}</div>
+      <div class="card-phase">${d.phase}</div>
+      ${d.notes ? `<div style="font-size:12px;color:var(--warning);margin-top:4px;">⚑ ${d.notes}</div>` : ''}
+      <div class="progress-bar"><div class="progress-fill ${progressColor(d.status)}" style="width:${progressWidth(d.status)}%"></div></div>
+    </div>
+  `).join('');
+}
+
+function renderDesign() {
+  const el = document.getElementById('designItems');
+  el.innerHTML = designItems.map(d => `
+    <div class="card">
+      <div class="card-header">
+        <span class="card-id">#${d.issue}</span>
+        <span class="badge ${badgeClass(d.status)}">${d.status}</span>
+      </div>
+      <div class="card-title"><a href="${issueUrl(d.issue)}" target="_blank">${d.title}</a></div>
+      ${d.notes ? `<div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">${d.notes}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderScope() {
+  const el = document.getElementById('scopeItems');
+  el.innerHTML = scopeItems.map(d => `
+    <div class="scope-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span class="scope-title"><a href="${issueUrl(d.issue)}" target="_blank" style="color:inherit;text-decoration:none;">${d.title}</a></span>
+        <span class="badge ${badgeClass(d.status)}" style="font-size:10px;">${d.status}</span>
+      </div>
+      <div class="scope-source">${d.source}${d.design ? ' · Stitch design complete' : ''}</div>
+    </div>
+  `).join('');
+}
+
+function renderClient() {
+  const el = document.getElementById('clientItems');
+  el.innerHTML = clientItems.map(d => `
+    <div class="card" style="border-left:3px solid var(--warning);">
+      <div class="card-header">
+        <span class="card-id">#${d.issue}</span>
+        <span class="badge badge-client">${d.assignee}</span>
+      </div>
+      <div class="card-title"><a href="${issueUrl(d.issue)}" target="_blank">${d.title}</a></div>
+      <ul class="checklist">
+        ${d.items.map(item => `<li>${item}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function updateStats() {
+  const statuses = deliverables.map(d => d.status.toLowerCase());
+  document.getElementById('statTotal').textContent = deliverables.length;
+  document.getElementById('statInProgress').textContent = statuses.filter(s => s === 'in progress').length;
+  document.getElementById('statDone').textContent = statuses.filter(s => s === 'done').length;
+  document.getElementById('statDesign').textContent = designItems.filter(d => d.status.toLowerCase() === 'in review').length;
+  document.getElementById('statScopeAdds').textContent = scopeItems.length;
+}
+
+// ─── GitHub Sync ────────────────────────────────────────────────────
+
+const PROJECT_NUMBER = 2;
+const ORG = 'Human-Centered-Tech';
+
+// GraphQL query to get project board items with their column status
+const BOARD_QUERY = `query {
+  organization(login: "${ORG}") {
+    projectV2(number: ${PROJECT_NUMBER}) {
+      items(first: 100) {
+        nodes {
+          fieldValues(first: 10) {
+            nodes {
+              ... on ProjectV2ItemFieldSingleSelectValue {
+                name
+                field { ... on ProjectV2SingleSelectField { name } }
+              }
+            }
+          }
+          content {
+            ... on Issue {
+              number
+              title
+              state
+            }
+            ... on DraftIssue {
+              title
+            }
+          }
+        }
+      }
+    }
+  }
+}`;
+
+async function syncFromGitHub() {
+  const btn = document.querySelector('.sync-btn');
+  const statusEl = document.getElementById('syncStatus');
+  btn.disabled = true;
+  statusEl.textContent = 'Syncing...';
+
+  let token = localStorage.getItem('gh_token');
+  if (!token) {
+    token = prompt('Enter a GitHub personal access token with project read scope (stored in localStorage for future syncs):');
+    if (!token) { btn.disabled = false; statusEl.textContent = 'Cancelled.'; return; }
+    localStorage.setItem('gh_token', token);
+  }
+
+  try {
+    const resp = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Authorization': `bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: BOARD_QUERY })
+    });
+    if (!resp.ok) throw new Error(`GitHub API: ${resp.status}`);
+    const data = await resp.json();
+
+    if (data.errors) {
+      throw new Error(data.errors[0].message);
+    }
+
+    const items = data.data.organization.projectV2.items.nodes;
+
+    // Build a map of issue number → board column status
+    const statusMap = {};
+    items.forEach(item => {
+      const issue = item.content;
+      if (!issue || !issue.number) return;
+      const statusField = item.fieldValues.nodes.find(
+        fv => fv.field && fv.field.name === 'Status'
+      );
+      if (statusField) {
+        statusMap[issue.number] = statusField.name; // e.g. "In progress", "Backlog", "Done"
+      }
+    });
+
+    // Update all data arrays
+    let changed = 0;
+    const allItems = [...deliverables, ...designItems, ...scopeItems];
+    allItems.forEach(d => {
+      const boardStatus = statusMap[d.issue];
+      if (boardStatus && boardStatus.toLowerCase() !== d.status.toLowerCase()) {
+        d.status = boardStatus;
+        changed++;
+      }
+    });
+
+    renderDeliverables();
+    renderDesign();
+    renderScope();
+    updateStats();
+
+    const now = new Date().toLocaleString();
+    statusEl.textContent = `Synced ${now} · ${changed} status updates from board`;
+    document.getElementById('lastSync').textContent = `Last sync: ${now}`;
+    localStorage.setItem('lastSync', now);
+  } catch (err) {
+    statusEl.textContent = `Error: ${err.message}`;
+    if (err.message.includes('401') || err.message.includes('Bad credentials')) {
+      localStorage.removeItem('gh_token');
+      statusEl.textContent += ' (token cleared, try again)';
+    }
+  }
+
+  btn.disabled = false;
+}
+
+// ─── Init ───────────────────────────────────────────────────────────
+
+renderDeliverables();
+renderDesign();
+renderScope();
+renderClient();
+updateStats();
+
+const lastSync = localStorage.getItem('lastSync');
+if (lastSync) {
+  document.getElementById('lastSync').textContent = `Last sync: ${lastSync}`;
+}
+</script>
+</body>
+</html>
