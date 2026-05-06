@@ -398,7 +398,7 @@
       <span class="label">Deliverables</span>
     </div>
     <div class="header-stat">
-      <span class="number" id="statInProgress">5</span>
+      <span class="number" id="statInProgress">11</span>
       <span class="label">In Progress</span>
     </div>
     <div class="header-stat">
@@ -406,7 +406,7 @@
       <span class="label">Complete</span>
     </div>
     <div class="header-stat">
-      <span class="number" id="statDesign">4</span>
+      <span class="number" id="statDesign">0</span>
       <span class="label">Design Review</span>
     </div>
     <div class="header-stat">
@@ -484,47 +484,53 @@ const deliverables = [
   { id: 'D3', issue: 9, title: 'Product Catalog & Search', budget: '$2,232 (6%)', phase: 'Phase 1 · Weeks 1–3', status: 'In progress' },
   { id: 'D4', issue: 10, title: 'Shopping, Checkout & Platform Credits', budget: '$3,720 (10%)', phase: 'Phase 2 · Weeks 4–6', status: 'In progress', notes: 'Added: remove shipping step, split logged-in/guest checkout, Place Order CTA' },
   { id: 'D5', issue: 11, title: 'Order Management', budget: '$2,232 (6%)', phase: 'Phase 2 · Weeks 4–6', status: 'In progress' },
-  { id: 'D6', issue: 12, title: 'Reviews & Messaging', budget: '$1,860 (5%)', phase: 'Phase 4 · Weeks 10–12', status: 'Backlog' },
-  { id: 'D7', issue: 13, title: 'Wishlist, Favorites & Gift Registry', budget: '$1,860 (5%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
-  { id: 'D8', issue: 14, title: 'Business Directory & Listings', budget: '$4,836 (13%)', phase: 'Phase 3 · Weeks 7–9', status: 'Backlog', notes: 'Added: $50/yr floor, always open, owner interview, devotional, conditional CTA, custom badges, map/list toggle' },
+  { id: 'D6', issue: 12, title: 'Reviews & Messaging', budget: '$1,860 (5%)', phase: 'Phase 4 · Weeks 10–12', status: 'In progress' },
+  { id: 'D7', issue: 13, title: 'Wishlist, Favorites & Gift Registry', budget: '$1,860 (5%)', phase: 'Phase 5 · Weeks 13–14', status: 'In progress' },
+  { id: 'D8', issue: 14, title: 'Business Directory & Listings', budget: '$4,836 (13%)', phase: 'Phase 3 · Weeks 7–9', status: 'In progress', notes: 'Added: $50/yr floor, always open, owner interview, devotional, conditional CTA, custom badges, map/list toggle' },
   { id: 'D9', issue: 15, title: 'Catholic Speed Networking', budget: '$4,092 (11%)', phase: 'Phase 4 · Weeks 10–12', status: 'Backlog' },
   { id: 'D10', issue: 16, title: 'Barter & Community Listings', budget: '$2,604 (7%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
-  { id: 'D11', issue: 17, title: 'Admin, Moderation & Analytics', budget: '$2,976 (8%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
-  { id: 'D12', issue: 18, title: 'Notifications, Email & SMS', budget: '$1,860 (5%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
-  { id: 'D13', issue: 19, title: 'CRM Integration', budget: '$744 (2%)', phase: 'Phase 5 · Weeks 13–14', status: 'Backlog' },
+  { id: 'D11', issue: 17, title: 'Admin, Moderation & Analytics', budget: '$2,976 (8%)', phase: 'Phase 5 · Weeks 13–14', status: 'In progress' },
+  { id: 'D12', issue: 18, title: 'Notifications, Email & SMS', budget: '$1,860 (5%)', phase: 'Phase 5 · Weeks 13–14', status: 'In progress' },
+  { id: 'D13', issue: 19, title: 'CRM Integration', budget: '$744 (2%)', phase: 'Phase 5 · Weeks 13–14', status: 'In progress' },
   { id: 'D14', issue: 20, title: 'Mobile App Deployment', budget: '$1,488 (4%)', phase: 'Phase 6 · Weeks 15–16', status: 'Backlog' },
   { id: 'D15', issue: 21, title: 'QA Testing & Launch', budget: '$1,488 (4%)', phase: 'Phase 6 · Weeks 15–16', status: 'Backlog' },
 ];
 
 const designItems = [
-  { issue: 3, title: 'Storefront Design — 39 screens', status: 'In review', notes: '4 new pages added from meeting feedback' },
-  { issue: 4, title: 'Vendor Dashboard Design — 13 screens', status: 'In review' },
-  { issue: 5, title: 'Admin Dashboard Design — 16 screens', status: 'In review' },
-  { issue: 6, title: 'Auth Flow Design — 5 screens', status: 'In review' },
-  { issue: 30, title: 'Design Revisions from 3/24–4/1 Meeting Feedback', status: 'Backlog', notes: '11 screens edited, 3 new screens generated' },
+  { issue: 3, title: 'Storefront Design — 39 screens', status: 'Done', notes: '4 new pages added from meeting feedback' },
+  { issue: 4, title: 'Vendor Dashboard Design — 13 screens', status: 'Done' },
+  { issue: 5, title: 'Admin Dashboard Design — 16 screens', status: 'Done' },
+  { issue: 6, title: 'Auth Flow Design — 5 screens', status: 'Done' },
+  { issue: 30, title: 'Design Revisions from 3/24–4/1 Meeting Feedback', status: 'Done', notes: '11 screens edited, 3 new screens generated' },
 ];
 
 const scopeItems = [
   { issue: 25, title: 'Business Sales/Landing Page', source: 'Design Review (4/1)', status: 'Backlog', design: true },
   { issue: 26, title: 'Business Payment Page', source: 'Design Review (4/1)', status: 'Backlog', design: true },
-  { issue: 27, title: 'Gift Guide / Curated Collections', source: 'Stitch Mockup Review (3/31)', status: 'Backlog', design: true },
+  { issue: 27, title: 'Gift Guide / Curated Collections', source: 'Stitch Mockup Review (3/31)', status: 'In progress', design: true },
   { issue: 28, title: 'Guest Checkout Page', source: 'Design Review (4/1)', status: 'Backlog', design: true },
-  { issue: 29, title: 'April 16 Demo Video — Screenshots & Assets', source: 'Stitch Mockup Review (3/31)', status: 'Backlog', design: false },
-  { issue: 24, title: 'April 16 Vendor Demo Readiness', source: 'SOW Section 4.2', status: 'In progress', design: false },
+  { issue: 29, title: 'April 16 Demo Video — Screenshots & Assets', source: 'Stitch Mockup Review (3/31)', status: 'Done', design: false },
+  { issue: 24, title: 'April 16 Vendor Demo Readiness', source: 'SOW Section 4.2', status: 'Done', design: false },
 ];
 
 const clientItems = [
   { issue: 23, title: 'Content & Data', assignee: 'Brooke', items: [
-    'Send parish database',
-    'Provide ~10 testimonials',
-    'Map ~7 customer journeys (by Apr 7)',
-    'Produce demo video from Stitch screenshots',
+    'Provide ~10 testimonials for pricing & sales landing',
+    'Brand logo (SVG + PNG)',
+    'Hero image for homepage',
+    'Open Graph / social sharing image',
+    'Favicon / app icon',
+    'About page — founder story',
+    'Privacy Policy + Terms (counsel review)',
   ]},
   { issue: 22, title: 'Third-Party Credentials', assignee: 'Brooke / Liam', items: [
-    'Zoom API credentials',
+    'TaxJar API keys + ship-from address (US sales tax)',
+    'Zoom API credentials (speed networking)',
     'Freshworks CRM API key',
-    'Twilio credentials',
-    'SendGrid API key',
+    'Twilio credentials (order SMS)',
+    'SendGrid API key (marketing email)',
+    'Shopify Partner app credentials (Shopify importer)',
+    'Etsy Open API v3 app approval (Etsy importer)',
   ]},
 ];
 
