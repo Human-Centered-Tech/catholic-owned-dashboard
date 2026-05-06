@@ -1,22 +1,94 @@
-name: Deploy to GitHub Pages
+name: Sync project board and deploy dashboard
+
+# Triggers:
+# - push: when someone manually edits index.html, css, etc. and pushes to main
+# - schedule: every 6 hours, refresh data.json from the GitHub project board
+# - workflow_dispatch: manual "refresh now" button in the Actions UI
+#
+# Sync requires a PROJECT_READ_TOKEN secret (a fine-grained PAT with read
+# access to organization Projects). If unset, the workflow still runs but
+# skips the sync step — the existing data.json (if any) is deployed as-is.
+
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
 permissions:
-  contents: read
+  contents: write   # allow committing data.json back
   pages: write
   id-token: write
+
+# Prevent overlapping deploys; let the in-flight one finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  sync-and-deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Sync project board into data.json
+        if: github.event_name != 'push'
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_READ_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::PROJECT_READ_TOKEN secret not set — skipping sync. Existing data.json (if any) will be deployed."
+            exit 0
+          fi
+          gh project item-list 2 \
+            --owner Human-Centered-Tech \
+            --format json \
+            --limit 200 \
+            > /tmp/board.json
+          python3 - <<'PY'
+          import json, datetime
+          with open('/tmp/board.json') as f:
+              board = json.load(f)
+          out = {
+              'updated_at': datetime.datetime.utcnow().isoformat() + 'Z',
+              'source': 'Human-Centered-Tech project #2',
+              'items': []
+          }
+          for item in board.get('items', []):
+              content = item.get('content') or {}
+              num = content.get('number')
+              status = item.get('status')
+              if num is not None and status:
+                  out['items'].append({'issue': num, 'status': status})
+          out['items'].sort(key=lambda x: x['issue'])
+          with open('data.json', 'w') as f:
+              json.dump(out, f, indent=2)
+          print(f"Wrote {len(out['items'])} items to data.json")
+          PY
+
+      - name: Commit data.json if changed
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -f data.json ] && ! git diff --quiet -- data.json; then
+            git add data.json
+            git commit -m "Sync project board status [automated]"
+            git push
+            echo "Committed updated data.json"
+          else
+            echo "No changes to data.json — skipping commit"
+          fi
+
       - uses: actions/configure-pages@v5
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
+
       - id: deployment
         uses: actions/deploy-pages@v4
