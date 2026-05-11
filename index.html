@@ -620,7 +620,9 @@ function renderClient() {
       </div>
       <div class="card-title"><a href="${issueUrl(d.issue)}" target="_blank">${d.title}</a></div>
       <ul class="checklist">
-        ${d.items.map(item => `<li>${item}</li>`).join('')}
+        ${d.items.map((item, idx) => `
+          <li class="${isChecked(d.issue, idx) ? 'done' : ''}" onclick="toggleChecklistItem(${d.issue}, ${idx})" style="cursor:pointer;">${item}</li>
+        `).join('')}
       </ul>
     </div>
   `).join('');
@@ -633,6 +635,93 @@ function updateStats() {
   document.getElementById('statDone').textContent = statuses.filter(s => s === 'done').length;
   document.getElementById('statDesign').textContent = designItems.filter(d => d.status.toLowerCase() === 'in review').length;
   document.getElementById('statScopeAdds').textContent = scopeItems.length;
+}
+
+// ─── Client Checklist Persistence ───────────────────────────────────
+// State lives in `checklist.json` in this repo. Reads are anonymous (public
+// file); writes go through the GitHub Contents API with a user-supplied PAT
+// that has contents:write on Human-Centered-Tech/catholic-owned-dashboard.
+
+const DASHBOARD_REPO = 'Human-Centered-Tech/catholic-owned-dashboard';
+const CHECKLIST_PATH = 'checklist.json';
+
+let checklistState = {}; // { "22": [bool, ...], "23": [bool, ...] }
+let checklistSha = null; // file SHA needed for next PUT
+
+async function loadChecklist() {
+  try {
+    const resp = await fetch(`./${CHECKLIST_PATH}?t=${Date.now()}`, { cache: 'no-store' });
+    if (resp.ok) checklistState = await resp.json();
+  } catch (e) { /* fall back to empty */ }
+}
+
+function isChecked(issue, idx) {
+  return !!(checklistState[issue] && checklistState[issue][idx]);
+}
+
+async function toggleChecklistItem(issue, idx) {
+  if (!checklistState[issue]) checklistState[issue] = [];
+  const prev = !!checklistState[issue][idx];
+  checklistState[issue][idx] = !prev;
+  renderClient();
+  const ok = await saveChecklist();
+  if (!ok) {
+    checklistState[issue][idx] = prev;
+    renderClient();
+  }
+}
+
+async function saveChecklist() {
+  let token = localStorage.getItem('gh_token');
+  if (!token) {
+    token = prompt('Enter a GitHub PAT with contents:write on catholic-owned-dashboard (stored in localStorage):');
+    if (!token) return false;
+    localStorage.setItem('gh_token', token);
+  }
+
+  try {
+    if (!checklistSha) {
+      const headResp = await fetch(
+        `https://api.github.com/repos/${DASHBOARD_REPO}/contents/${CHECKLIST_PATH}`,
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+      if (headResp.ok) {
+        const meta = await headResp.json();
+        checklistSha = meta.sha;
+      }
+    }
+
+    const body = {
+      message: 'Update client checklist [dashboard]',
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(checklistState, null, 2) + '\n'))),
+    };
+    if (checklistSha) body.sha = checklistSha;
+
+    const putResp = await fetch(
+      `https://api.github.com/repos/${DASHBOARD_REPO}/contents/${CHECKLIST_PATH}`,
+      {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }
+    );
+    if (!putResp.ok) {
+      const err = await putResp.text();
+      if (putResp.status === 401 || putResp.status === 403) {
+        localStorage.removeItem('gh_token');
+        alert(`Save failed (${putResp.status}). Token cleared — click again to re-enter.`);
+      } else {
+        alert(`Save failed (${putResp.status}): ${err}`);
+      }
+      return false;
+    }
+    const result = await putResp.json();
+    checklistSha = result.content.sha;
+    return true;
+  } catch (e) {
+    alert(`Save error: ${e.message}`);
+    return false;
+  }
 }
 
 // ─── GitHub Sync ────────────────────────────────────────────────────
@@ -763,7 +852,7 @@ async function loadServerData() {
 }
 
 (async function init() {
-  const serverData = await loadServerData();
+  const [serverData] = await Promise.all([loadServerData(), loadChecklist()]);
   if (serverData && Array.isArray(serverData.items)) {
     const statusByIssue = Object.fromEntries(
       serverData.items.map(i => [i.issue, i.status])
