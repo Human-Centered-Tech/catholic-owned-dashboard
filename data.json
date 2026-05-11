@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-06T22:27:01.893933Z",
+  "updated_at": "2026-05-11T21:24:38.076Z",
   "source": "Human-Centered-Tech project #2",
   "items": [
     {
@@ -28,23 +28,23 @@
     },
     {
       "issue": 7,
-      "status": "In progress"
+      "status": "In review"
     },
     {
       "issue": 8,
-      "status": "In progress"
+      "status": "In review"
     },
     {
       "issue": 9,
-      "status": "In progress"
+      "status": "In review"
     },
     {
       "issue": 10,
-      "status": "In progress"
+      "status": "In review"
     },
     {
       "issue": 11,
-      "status": "In progress"
+      "status": "In review"
     },
     {
       "issue": 12,
@@ -148,35 +148,87 @@
     },
     {
       "issue": 37,
-      "status": "Backlog"
+      "status": "Done"
     },
     {
       "issue": 38,
-      "status": "Backlog"
+      "status": "Done"
     },
     {
       "issue": 39,
-      "status": "Backlog"
+      "status": "Done"
     },
     {
       "issue": 40,
-      "status": "Backlog"
+      "status": "Done"
     },
     {
       "issue": 41,
-      "status": "Backlog"
+      "status": "Done"
     },
     {
       "issue": 42,
-      "status": "Backlog"
+      "status": "Done"
     },
     {
       "issue": 43,
-      "status": "Backlog"
+      "status": "Done"
     },
     {
       "issue": 44,
+      "status": "Done"
+    },
+    {
+      "issue": 45,
+      "status": "Done"
+    },
+    {
+      "issue": 46,
+      "status": "Done"
+    },
+    {
+      "issue": 47,
       "status": "Backlog"
+    },
+    {
+      "issue": 48,
+      "status": "Backlog"
+    },
+    {
+      "issue": 49,
+      "status": "Done"
+    },
+    {
+      "issue": 50,
+      "status": "Done"
+    },
+    {
+      "issue": 51,
+      "status": "Backlog"
+    },
+    {
+      "issue": 52,
+      "status": "Backlog"
+    },
+    {
+      "issue": 53,
+      "status": "Done"
+    },
+    {
+      "issue": 54,
+      "status": "Done"
+    },
+    {
+      "issue": 55,
+      "status": "Done"
+    },
+    {
+      "issue": 56,
+      "status": "Done"
+    },
+    {
+      "issue": 57,
+      "status": "Done"
     }
   ]
 }
